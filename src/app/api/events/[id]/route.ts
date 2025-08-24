@@ -7,13 +7,11 @@ const prisma = new PrismaClient();
 
 export async function GET(
   _req: Request,
-  context: { params: Promise<{ id: string }> } // 👈 Promise type
+  context: { params: Promise<{ id: string }> } // ✅ Promise type
 ) {
-  const { id } = await context.params;         // 👈 await here
+  const { id } = await context.params; // ✅ await the params
 
-  const event = await prisma.event.findUnique({
-    where: { id },
-  });
+  const event = await prisma.event.findUnique({ where: { id } });
 
   if (!event) {
     return NextResponse.json({ error: "Event not found" }, { status: 404 });
@@ -21,7 +19,6 @@ export async function GET(
 
   return NextResponse.json(event);
 }
-
 
 export async function PATCH(
   req: Request,
@@ -32,7 +29,7 @@ export async function PATCH(
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
-  const { id } = await context.params; // ✅ await params
+  const { id } = await context.params;
   const role = session.user.role;
   const userId = session.user.id;
 
@@ -41,14 +38,12 @@ export async function PATCH(
     return NextResponse.json({ error: "Event not found" }, { status: 404 });
   }
 
-  // ✅ Role check: only Admin or Owner can update
   if (role !== "ADMIN" && event.createdById !== userId) {
     return NextResponse.json({ error: "Forbidden" }, { status: 403 });
   }
 
   const body = await req.json();
 
-  // ✅ Only allow specific fields to be updated
   const updated = await prisma.event.update({
     where: { id },
     data: {
@@ -63,18 +58,22 @@ export async function PATCH(
 }
 
 export async function DELETE(
-  _: Request,
-  context: { params: Promise<{ id: string }> } // 👈 make it Promise
+  _req: Request,
+  context: { params: Promise<{ id: string }> }
 ) {
   const session = await getServerSession(authOptions);
-  if (!session) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  if (!session) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
 
-  const { id } = await context.params; // 👈 await before using
+  const { id } = await context.params;
   const role = session.user.role;
   const userId = session.user.id;
 
   const event = await prisma.event.findUnique({ where: { id } });
-  if (!event) return NextResponse.json({ error: "Event not found" }, { status: 404 });
+  if (!event) {
+    return NextResponse.json({ error: "Event not found" }, { status: 404 });
+  }
 
   if (role !== "ADMIN" && event.createdById !== userId) {
     return NextResponse.json({ error: "Forbidden" }, { status: 403 });
@@ -83,4 +82,3 @@ export async function DELETE(
   await prisma.event.delete({ where: { id } });
   return NextResponse.json({ success: true });
 }
-

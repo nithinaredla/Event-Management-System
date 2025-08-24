@@ -1,11 +1,12 @@
-import { PrismaAdapter } from "@auth/prisma-adapter";
+// src/lib/auth.ts
+import { PrismaAdapter } from "@next-auth/prisma-adapter";
 import { prisma } from "@/lib/prisma";
 import CredentialsProvider from "next-auth/providers/credentials";
 import type { NextAuthOptions } from "next-auth";
 import { compare } from "bcryptjs";
 
 export const authOptions: NextAuthOptions = {
-  adapter: PrismaAdapter(prisma),
+  adapter: PrismaAdapter(prisma), // ✅ Correct adapter for v4
   providers: [
     CredentialsProvider({
       name: "Credentials",
@@ -43,13 +44,13 @@ export const authOptions: NextAuthOptions = {
     },
     async session({ session, token }) {
       if (token) {
-        session.user.id = token.id as string;
-        session.user.role = token.role as "ADMIN" | "STAFF" | "OWNER";
+        session.user.id = token.id;
+        session.user.role = token.role;
       }
       return session;
     },
   },
   pages: {
-    signIn: "/login", // we'll add this page
+    signIn: "/login",
   },
 };

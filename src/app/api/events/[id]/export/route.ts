@@ -6,17 +6,19 @@ import { createObjectCsvStringifier } from "csv-writer";
 
 export async function GET(
   _req: Request,
-  { params }: { params: { id: string } }
+  context: { params: Promise<{ id: string }> } // ✅ use Promise for Turbopack compatibility
 ) {
+  const { id } = await context.params; // await the promise
+
   const session = await getServerSession(authOptions);
   if (!session) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
-  const userId = (session.user as any).id;
-  const role = (session.user as any).role;
+  const userId = session.user.id;
+  const role = session.user.role;
 
   // Ensure only event owner or staff/admin can export
   const event = await prisma.event.findUnique({
-    where: { id: params.id },
+    where: { id },
     include: { rsvps: true },
   });
 
@@ -45,7 +47,7 @@ export async function GET(
   return new NextResponse(csv, {
     headers: {
       "Content-Type": "text/csv",
-      "Content-Disposition": `attachment; filename="attendees-${params.id}.csv"`,
+      "Content-Disposition": `attachment; filename="attendees-${id}.csv"`,
     },
   });
 }
