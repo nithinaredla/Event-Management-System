@@ -4,6 +4,7 @@ import { redirect } from "next/navigation";
 import { headers } from "next/headers";
 import Link from "next/link";
 import EventActions from "@/components/EventActions";
+import { prisma } from "@/lib/prisma";
 
 interface Event {
   id: string;
@@ -91,4 +92,20 @@ export default async function DashboardPage() {
       </ul>
     </div>
   );
+}
+
+export async function listEventsForRole(params: {
+  role: "ADMIN" | "STAFF" | "OWNER";
+  userId: string;
+}) {
+  const { role, userId } = params;
+  if (role === "ADMIN" || role === "STAFF") {
+    return prisma.event.findMany({
+      include: { createdBy: { select: { name: true, email: true } } },
+    });
+  }
+  return prisma.event.findMany({
+    where: { createdById: userId },
+    include: { createdBy: { select: { name: true, email: true } } },
+  });
 }
