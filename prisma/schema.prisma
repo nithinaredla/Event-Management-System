@@ -19,7 +19,7 @@ model User {
   name          String?
   email         String?   @unique
   password      String?
-  role          String    @default("OWNER")
+  role          UserRole  @default(OWNER)   // 🔥 changed String -> UserRole
   emailVerified DateTime?
   image         String?
   accounts      Account[]
@@ -40,11 +40,12 @@ model Account {
   scope              String?
   id_token           String?  @db.Text
   session_state      String?
-
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  role               UserRole @default(STAFF)   // 🔥 also use enum
+  user               User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([provider, providerAccountId])
 }
+
 
 model Session {
   id           String   @id @default(cuid())
@@ -78,5 +79,14 @@ model RSVP {
   eventId      String
   attendeeName String
   attendeeEmail String
+  createdAt DateTime @default(now())
   event        Event @relation(fields: [eventId], references: [id])
 }
+
+enum UserRole {
+  ADMIN
+  OWNER
+  STAFF
+}
+
+
