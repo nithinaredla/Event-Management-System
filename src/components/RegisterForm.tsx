@@ -41,16 +41,16 @@ export default function RegisterForm() {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-green-50 via-white to-green-100">
+    <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-green-50 via-white to-green-100 px-4 sm:px-6">
       <form
         onSubmit={handleRegister}
-        className="p-8 w-full max-w-sm border rounded-2xl shadow-xl bg-white space-y-5"
+        className="p-6 sm:p-8 w-full max-w-sm sm:max-w-md border rounded-2xl shadow-xl bg-white space-y-5"
       >
         {/* Title */}
-        <h2 className="text-3xl font-extrabold text-center text-gray-800">
+        <h2 className="text-2xl sm:text-3xl font-extrabold text-center text-gray-800">
           Create an Account 🚀
         </h2>
-        <p className="text-center text-gray-500">
+        <p className="text-center text-gray-500 text-sm sm:text-base">
           Join us and start managing your events
         </p>
 
@@ -115,7 +115,7 @@ export default function RegisterForm() {
         {/* Submit */}
         <button
           type="submit"
-          className="w-full bg-green-600 text-white py-3 rounded-lg font-semibold hover:bg-green-700 transition-all shadow-md"
+          className="w-full sm:w-auto sm:min-w-40 bg-green-600 text-white py-3 px-6 rounded-lg font-semibold hover:bg-green-700 transition-all shadow-md"
         >
           Register
         </button>

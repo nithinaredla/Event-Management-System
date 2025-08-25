@@ -23,9 +23,9 @@ export default function NewEventPage() {
   return (
     <form
       onSubmit={handleSubmit}
-      className="max-w-lg mx-auto bg-white rounded-2xl shadow p-8 space-y-6 border border-gray-100"
+      className="max-w-lg mx-auto bg-white rounded-2xl shadow p-6 sm:p-8 space-y-6 border border-gray-100"
     >
-      <h2 className="text-2xl font-bold text-gray-800 mb-4">Create Event</h2>
+      <h2 className="text-xl sm:text-2xl font-bold text-gray-800 mb-4">Create Event</h2>
 
       {/* Title */}
       <div>
@@ -82,7 +82,7 @@ export default function NewEventPage() {
       {/* Submit */}
       <button
         type="submit"
-        className="w-full py-2.5 px-4 bg-blue-600 hover:bg-blue-700 text-white font-semibold 
+        className="w-full sm:w-auto sm:min-w-40 py-2.5 px-6 bg-blue-600 hover:bg-blue-700 text-white font-semibold 
                rounded-lg shadow transition"
       >
         Create Event

@@ -11,6 +11,7 @@ interface Event {
   dateTime: string;
   location: string;
   createdById: string;
+  createdBy: { name: string | null; email: string };
 }
 
 export default async function DashboardPage() {
@@ -69,9 +70,15 @@ export default async function DashboardPage() {
             <h2 className="text-xl font-semibold text-gray-800 mb-1">
               {event.title}
             </h2>
+
             <p className="text-gray-600 text-sm">
               {new Date(event.dateTime).toLocaleString()} · {event.location}
             </p>
+            {role === "ADMIN" && (
+              <p className="text-xs text-gray-500">
+                Owner: {event.createdBy?.name || event.createdBy?.email}
+              </p>
+            )}
 
             {/* ✅ Interactive actions moved into a client component */}
             <EventActions

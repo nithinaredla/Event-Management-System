@@ -22,9 +22,12 @@ export async function createEvent(params: {
 export async function listEventsForRole(params: { role: "ADMIN" | "STAFF" | "OWNER"; userId: string }) {
   const { role, userId } = params;
   if (role === "ADMIN" || role === "STAFF") {
-    return prisma.event.findMany();
+    return prisma.event.findMany({ include: { createdBy: { select: { name: true, email: true } } } });
   }
-  return prisma.event.findMany({ where: { createdById: userId } });
+  return prisma.event.findMany({
+    where: { createdById: userId },
+    include: { createdBy: { select: { name: true, email: true } } }
+  });
 }
 
 export async function getEventById(id: string) {

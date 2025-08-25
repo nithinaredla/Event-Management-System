@@ -44,38 +44,39 @@ export default function EditEventPage() {
     router.push("/dashboard");
   };
 
-  if (!event) return <p>Loading...</p>;
+  if (!event) return <p className="max-w-md mx-auto p-6 text-gray-600">Loading...</p>;
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-4 max-w-md mx-auto">
-      <h2 className="text-xl font-bold">Edit Event</h2>
+    <form onSubmit={handleSubmit} className="space-y-4 max-w-md mx-auto bg-white border border-gray-100 rounded-2xl shadow p-6 sm:p-8">
+      <h2 className="text-xl sm:text-2xl font-bold text-gray-800">Edit Event</h2>
       <input
-        className="border p-2 w-full"
+        className="w-full rounded-lg border-gray-300 focus:border-blue-500 focus:ring-blue-500 shadow-sm p-2.5 text-gray-900"
         placeholder="Title"
         value={title}
         onChange={(e) => setTitle(e.target.value)}
       />
       <input
         type="datetime-local"
-        className="border p-2 w-full"
+        className="w-full rounded-lg border-gray-300 focus:border-blue-500 focus:ring-blue-500 shadow-sm p-2.5 text-gray-900"
         value={dateTime}
         onChange={(e) => setDateTime(e.target.value)}
       />
       <input
-        className="border p-2 w-full"
+        className="w-full rounded-lg border-gray-300 focus:border-blue-500 focus:ring-blue-500 shadow-sm p-2.5 text-gray-900"
         placeholder="Location"
         value={location}
         onChange={(e) => setLocation(e.target.value)}
       />
       <textarea
-        className="border p-2 w-full"
+        rows={4}
+        className="w-full rounded-lg border-gray-300 focus:border-blue-500 focus:ring-blue-500 shadow-sm p-2.5 text-gray-900"
         placeholder="Description"
         value={description}
         onChange={(e) => setDescription(e.target.value)}
       />
       <button
         type="submit"
-        className="px-4 py-2 bg-blue-600 text-white rounded"
+        className="w-full sm:w-auto sm:min-w-40 py-2.5 px-6 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg shadow transition"
       >
         Update
       </button>

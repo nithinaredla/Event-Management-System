@@ -40,20 +40,20 @@ export default function LoginForm() {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-blue-50 via-white to-blue-100">
+    <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-blue-50 via-white to-blue-100 px-4 sm:px-6">
       <form
         onSubmit={handleLogin}
-        className="p-8 w-full max-w-sm border rounded-2xl shadow-xl bg-white space-y-5"
+        className="p-6 sm:p-8 w-full max-w-sm sm:max-w-md border rounded-2xl shadow-xl bg-white space-y-5"
       >
         {message && (
           <p className="text-blue-700 bg-blue-50 border border-blue-200 p-3 rounded text-sm text-center">
             {message}
           </p>
         )}
-        <h2 className="text-3xl font-extrabold text-center text-gray-800">
+        <h2 className="text-2xl sm:text-3xl font-extrabold text-center text-gray-800">
           Welcome Back 👋
         </h2>
-        <p className="text-center text-gray-500">Login to your account</p>
+        <p className="text-center text-gray-500 text-sm sm:text-base">Login to your account</p>
 
         {/* Email */}
         <div>
@@ -104,7 +104,7 @@ export default function LoginForm() {
         {/* Submit */}
         <button
           type="submit"
-          className="w-full bg-blue-600 text-white py-3 rounded-lg font-semibold hover:bg-blue-700 transition-all shadow-md"
+          className="w-full sm:w-auto sm:min-w-40 bg-blue-600 text-white py-3 px-6 rounded-lg font-semibold hover:bg-blue-700 transition-all shadow-md"
         >
           Login
         </button>
