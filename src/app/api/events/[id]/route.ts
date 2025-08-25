@@ -1,9 +1,7 @@
 import { NextResponse } from "next/server";
-import { PrismaClient } from "@prisma/client";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
-
-const prisma = new PrismaClient();
+import { deleteEventById, getEventById, updateEventById } from "@/features/events/server";
 
 export async function GET(
   _req: Request,
@@ -11,7 +9,7 @@ export async function GET(
 ) {
   const { id } = await context.params; // ✅ await the params
 
-  const event = await prisma.event.findUnique({ where: { id } });
+  const event = await getEventById(id);
 
   if (!event) {
     return NextResponse.json({ error: "Event not found" }, { status: 404 });
@@ -33,7 +31,7 @@ export async function PATCH(
   const role = session.user.role;
   const userId = session.user.id;
 
-  const event = await prisma.event.findUnique({ where: { id } });
+  const event = await getEventById(id);
   if (!event) {
     return NextResponse.json({ error: "Event not found" }, { status: 404 });
   }
@@ -44,14 +42,11 @@ export async function PATCH(
 
   const body = await req.json();
 
-  const updated = await prisma.event.update({
-    where: { id },
-    data: {
-      title: body.title,
-      description: body.description,
-      dateTime: body.dateTime ? new Date(body.dateTime) : event.dateTime,
-      location: body.location,
-    },
+  const updated = await updateEventById(id, {
+    title: body.title,
+    description: body.description,
+    dateTime: body.dateTime ?? undefined,
+    location: body.location,
   });
 
   return NextResponse.json(updated);
@@ -70,7 +65,7 @@ export async function DELETE(
   const role = session.user.role;
   const userId = session.user.id;
 
-  const event = await prisma.event.findUnique({ where: { id } });
+  const event = await getEventById(id);
   if (!event) {
     return NextResponse.json({ error: "Event not found" }, { status: 404 });
   }
@@ -79,6 +74,6 @@ export async function DELETE(
     return NextResponse.json({ error: "Forbidden" }, { status: 403 });
   }
 
-  await prisma.event.delete({ where: { id } });
+  await deleteEventById(id);
   return NextResponse.json({ success: true });
 }

@@ -3,7 +3,7 @@ import { authOptions } from "@/lib/auth";
 import { redirect } from "next/navigation";
 import { headers } from "next/headers";
 import Link from "next/link";
-import EventActions from "../components/EventActions";
+import EventActions from "@/components/EventActions";
 
 interface Event {
   id: string;

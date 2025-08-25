@@ -5,10 +5,13 @@ import { signIn, useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 
 export default function LoginForm() {
     const { status } = useSession();
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const callbackUrl = searchParams.get("callbackUrl") || "/dashboard";
       useEffect(() => {
     if (status === "authenticated") {
       router.replace("/dashboard");
@@ -18,6 +21,7 @@ export default function LoginForm() {
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState("");
+  const message = searchParams.get("message");
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -31,7 +35,7 @@ export default function LoginForm() {
     if (res?.error) {
       setError("Invalid email or password");
     } else {
-      router.push("/dashboard");
+      router.push(callbackUrl);
     }
   };
 
@@ -41,6 +45,11 @@ export default function LoginForm() {
         onSubmit={handleLogin}
         className="p-8 w-full max-w-sm border rounded-2xl shadow-xl bg-white space-y-5"
       >
+        {message && (
+          <p className="text-blue-700 bg-blue-50 border border-blue-200 p-3 rounded text-sm text-center">
+            {message}
+          </p>
+        )}
         <h2 className="text-3xl font-extrabold text-center text-gray-800">
           Welcome Back 👋
         </h2>
@@ -114,3 +123,5 @@ export default function LoginForm() {
     </div>
   );
 }
+
+

@@ -53,3 +53,5 @@ export default function EventActions({ eventId, canEdit, canDelete }: EventActio
     </div>
   );
 }
+
+

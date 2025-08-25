@@ -19,7 +19,7 @@ export default function Navbar() {
         {/* Links */}
         <div className="flex items-center space-x-6">
           <Link
-            href="/dashboard"
+            href={session ? "/dashboard" : "/login?message=Please%20login%20to%20see%20the%20dashboard&callbackUrl=/dashboard"}
             className="px-4 py-2 rounded-xl bg-blue-600 text-white font-medium shadow-md hover:shadow-lg hover:bg-blue-700 transition-all duration-300"
           >
             Dashboard
@@ -53,3 +53,5 @@ export default function Navbar() {
     </nav>
   );
 }
+
+

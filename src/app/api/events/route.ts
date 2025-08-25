@@ -1,9 +1,7 @@
 import { NextResponse } from "next/server";
-import { PrismaClient } from "@prisma/client";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
-
-const prisma = new PrismaClient();
+import { createEvent, listEventsForRole } from "@/features/events/server";
 
 export async function POST(req: Request) {
   const session = await getServerSession(authOptions);
@@ -19,9 +17,7 @@ export async function POST(req: Request) {
   
   const { title, description, dateTime, location } = await req.json();
   console.log(title,description);
-  const event = await prisma.event.create({
-    data: { title, description, dateTime: new Date(dateTime), location, createdById: userId },
-  });
+  const event = await createEvent({ title, description, dateTime, location, createdById: userId });
 
   return NextResponse.json(event);
 }
@@ -33,17 +29,7 @@ export async function GET() {
   const role = session.user.role;
   const userId = session.user.id;
 
-  let events;
-
-  if (role === "ADMIN" || role === "STAFF") {
-    // Admin & Staff see all events
-    events = await prisma.event.findMany();
-  } else if (role === "OWNER") {
-    // Owner sees only their events
-    events = await prisma.event.findMany({ where: { createdById: userId } });
-  } else {
-    return NextResponse.json({ error: "Forbidden" }, { status: 403 });
-  }
+  const events = await listEventsForRole({ role, userId });
 
   return NextResponse.json(events);
 }

@@ -74,7 +74,7 @@ export default function EventPage() {
             type="submit"
             className="px-4 py-2 bg-green-500 text-white rounded"
           >
-            Submit
+            Register Now
           </button>
           <button
             type="button"

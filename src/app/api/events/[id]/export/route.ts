@@ -1,8 +1,8 @@
-import { prisma } from "@/lib/prisma";
 import { NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { createObjectCsvStringifier } from "csv-writer";
+import { getEventWithRsvps } from "@/features/events/server";
 
 export async function GET(
   _req: Request,
@@ -17,10 +17,7 @@ export async function GET(
   const role = session.user.role;
 
   // Ensure only event owner or staff/admin can export
-  const event = await prisma.event.findUnique({
-    where: { id },
-    include: { rsvps: true },
-  });
+  const event = await getEventWithRsvps(id);
 
   if (!event) return NextResponse.json({ error: "Event not found" }, { status: 404 });
 
